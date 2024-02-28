@@ -153,4 +153,3 @@ sudo apt install libgl1-mesa-dev
 ## Acknowledgments
 
 - [raylib-cpp-cmake-template](https://github.com/tupini07/raylib-cpp-cmake-template) - Raylib cmake starting point template by [tupini07](https://github.com/tupini07).
-
