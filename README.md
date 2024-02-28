@@ -19,17 +19,19 @@ This template simplifies the setup process for raylib using CMake and CMake Fetc
 
 #### Prerequisites
 - [cmake](https://cmake.org/)
-- [mingw](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-posix/seh/) or [Visual Studio](https://visualstudio.microsoft.com/) with Desktop development with c++
+- [mingw](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-posix/seh/) or [Visual Studio](https://visualstudio.microsoft.com/) with [Desktop development with c++](https://learn.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170)
 - [Emscripten](https://github.com/emscripten-core/emsdk) (for web build)
 
 
 ### Choosing What libraries to use
 ```bash
-## In CmakeLists.txt edit the following
+## In CmakeLists.txt edit the following towards the top of the file
+
+## To use a lib change the <useLibExample> to either ON or OFF below and then rebuild the cmake project
 
 # raylib
 set(useRaylib ON)
-set(useMinimalRaylibModules OFF) # used mostly with apps with no need for game modules
+set(useMinimalRaylibModules OFF) # used mostly with apps that have no need for game modules
 
 # imgui files
 set(useImGui OFF)
@@ -55,6 +57,8 @@ set(useReactPhysics3D OFF)
 ## Building for Desktop
 
 ```bash
+## works for both windows and linux
+
 ## Clone the repository
 git clone https://github.com/tupini07/raylib-cmake.git
 
@@ -67,13 +71,13 @@ mkdir build
 ## Navigate to the build directory
 cd build
 
-## Run CMake
+## Run CMake to configure the project
 cmake -DCMAKE_BUILD_TYPE=Release ..
 
-## Build the project using Visual Studio (you can also use Ninja or MinGW)
+## Build the project
 cmake --build . --config Release
 
-## The executable is found in the build directory either in its root or in debug/release file if using msvc
+## The executable is found in the build directory either in the root of the directory or in debug/release file if using msvc
 ```
 
 ## Building for the Web
@@ -106,7 +110,7 @@ cd raylib-cmake
 ## If emscripten_set_main_loop_arg is set up then just use:
 .\build_for_web.bat
 
-## This give much better performance in the web
+## This gives much better performance in the web
 ## Example of how to use emscripten_set_main_loop_arg below
 }
 ```
@@ -117,11 +121,11 @@ void ClassName::MainLoopHelper(void *userData)
 {
     ClassName *className = static_cast<ClassName *>(userData);
 
-    ClassName->Draw(); // call your game functions here
+    className->Draw(); // call your game functions here
 }
 
 // main loop
-void CLassName::Run()
+void ClassName::Run() // Run() is called from a ClassName instance in main
 {
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop_arg(MainLoopHelper, this, 0, 1);
@@ -138,16 +142,21 @@ void CLassName::Run()
 ### Troubleshooting
 
 ```bash
+## Linux
+
+## Dont forget to install
+build-essential
+
 ## If missing package issues arise while trying to build in linx you may need to install or update the following:
 
-sudo apt install libx11-dev
-sudo apt install libxrandr-dev
-sudo apt install libxinerama-dev
-sudo apt install libxcursor-dev
-sudo apt install libxi-dev
+libx11-dev
+libxrandr-dev
+libxinerama-dev
+libxcursor-dev
+libxi-dev
 
-## If missing opengl dir. install or update
-sudo apt install libgl1-mesa-dev
+## If missing opengl. install or update
+libgl1-mesa-dev
 ```
 
 ## Acknowledgments
