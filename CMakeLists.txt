@@ -401,6 +401,10 @@ endif()
 # Set common compiler flags
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
+if (NOT DEFINED PLATFORM)
+    set(PLATFORM "default")
+endif()
+
 if (${PLATFORM} STREQUAL "Web")
     # Tell Emscripten to build an .html file.
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
