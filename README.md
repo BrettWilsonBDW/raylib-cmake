@@ -1,6 +1,6 @@
 # Raylib CMake Template
 
-This template simplifies the setup process for raylib using CMake and CMake FetchContent. It automatically fetches and configures raylib along with a few essential game development libraries. Enjoy a hassle-free start to your game development journey with raylib using this straightforward template. Happy coding!
+This template simplifies the setup process for raylib using CMake FetchContent. It automatically fetches and configures raylib along with a few optional game development libraries. Fast and easy way to start your game dev journey with raylib using this straightforward template.
 
 ### libraries supported
 
