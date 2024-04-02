@@ -4,16 +4,16 @@ REM Turn off command echoing for cleaner output
 pushd %~dp0
 REM Change the current directory to the script's directory
 
-mkdir build-web
+mkdir ..\build-web
 REM Create a directory named 'build-web' if it doesn't exist
 
-xcopy /E /I /Y ".\assets\" ".\build-web\assets\"
+xcopy /E /I /Y "..\assets\" "..\build-web\assets\"
 REM Copy the contents of the 'assets' directory to 'build-web/assets/'
 REM /E: Copy directories and subdirectories, including empty ones
 REM /I: Assume the destination is a directory if more than one file is being copied
 REM /Y: Suppress the prompt to confirm overwriting files
 
-cd build-web
+cd ..\build-web
 REM Change the current directory to 'build-web'
 
 

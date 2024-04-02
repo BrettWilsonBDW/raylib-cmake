@@ -4,13 +4,13 @@
 cd "$(dirname "$0")"
 
 # Create a directory named 'build-web' if it doesn't exist
-mkdir -p build-web
+mkdir -p ../build-web
 
 # Copy the contents of the 'assets' directory to 'build-web/assets/'
-cp -R assets/ build-web/assets/
+cp -R ../assets/ ../build-web/assets/
 
 # Change the current directory to 'build-web'
-cd build-web
+cd ../build-web
 
 if [ "$1" == "async" ]; then
     echo "Using asyncify"
