@@ -104,6 +104,9 @@ cd emsdk
 ## Navigate to the project directory
 cd raylib-cmake
 
+## Change to tools dir
+cd tools
+
 ## Run the build script for the web
 .\build_for_web.bat async
 
