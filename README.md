@@ -13,7 +13,8 @@ This template simplifies the setup process for raylib using CMake FetchContent. 
 - [fmt](https://github.com/fmtlib/fmt) - Logging and string formatting library
   that makes your life much easier.
 - [bullet3](https://github.com/bulletphysics/bullet3) - 3d physics engine.
-- [reactphysics3d](https://github.com/DanielChappuis/ReactPhysics3D) - Open source C++ physics engine library in 3D.
+- [reactphysics3d](https://github.com/DanielChappuis/ReactPhysics3D) - Open source C++ physics engine library in 3D. - Note Wasm not working
+- [JoltPhysics](https://github.com/jrouwe/JoltPhysics) - A multi core friendly rigid body physics and collision detection library, written in C++, suitable for games and VR applications.
 
 ### How to use this template
 
@@ -150,7 +151,7 @@ void ClassName::Run() // Run() is called from a ClassName instance in main
 ## Dont forget to install
 build-essential
 
-## If missing package issues arise while trying to build in linx you may need to install or update the following:
+## If missing package issues arise while trying to build in linux you may need to install or update the following:
 
 libx11-dev
 libxrandr-dev
