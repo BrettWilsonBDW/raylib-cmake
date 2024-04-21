@@ -13,8 +13,13 @@ cp -R ../assets/ ../build-web/assets/
 cd ../build-web
 
 if [ "$1" == "async" ]; then
-    echo "Using asyncify"
+    echo "using asyncify"
     emcmake cmake .. -DPLATFORM=Web -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-s USE_GLFW=3" -DCMAKE_EXECUTABLE_SUFFIX=".html" -DASYNCIFY=1
+elif [ "$1" == "debug" ]; then
+    emcmake cmake .. -DPLATFORM=Web -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXE_LINKER_FLAGS="-s USE_GLFW=3" -DCMAKE_EXECUTABLE_SUFFIX=".html"
+elif [ ! -z "$1" ]; then
+    echo "Unknown argument: $1"
+    exit 1
 else
     emcmake cmake .. -DPLATFORM=Web -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-s USE_GLFW=3" -DCMAKE_EXECUTABLE_SUFFIX=".html"
 fi
