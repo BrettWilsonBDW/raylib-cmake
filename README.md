@@ -26,39 +26,27 @@ This template simplifies the setup process for raylib using CMake FetchContent. 
 
 ### Choosing What libraries to use
 ```bash
-## In CmakeLists.txt edit the following towards the top of the file
+## In CmakeLists.txt edit the following at the top
 
-## To use a lib change the <useLibExample> to either ON or OFF below and then rebuild the cmake project
+## Toggle a library with ON or OFF
 
-# raylib
-set(useRaylib ON)
-set(useMinimalRaylibModules OFF) # used mostly with apps that have no need for game modules
-
-# imgui files
-set(useImGui OFF)
-set(noAssets OFF) # disable asset macros used with mostly with gui programs without assets
-
-# ldtk loader
-set(useLDtkLoader OFF)
-
-# fmt library
-set(useFmt OFF)
-
-# box2d 2d physics
-set(useBox2d OFF)
-
-# bullet physics 3d
-set(useBullet3 OFF)
-
-# reactphysics 3d
-set(useReactPhysics3D OFF)
+option(USE_RAYLIB "Use raylib" ON)
+option(USE_MINIMAL_RAYLIB_MODULES "Use minimal raylib modules" OFF)
+option(USE_IMGUI "Use ImGui" OFF)
+option(USE_NO_ASSETS "Use no assets" OFF)
+option(USE_LDTKLOADER "Use LDtk Loader" OFF)
+option(USE_FMT "Use fmt" OFF)
+option(USE_BOX2D "Use Box2D" OFF)
+option(USE_BULLET3 "Use Bullet Physics 3D" OFF)
+option(USE_REACTPHYSICS3D "Use React Physics 3D" OFF)
+option(USE_JOLTPHYSICS "Use Jolt Physics 3D" OFF)
 
 ```
 
 ## Building for Desktop
 
 ```bash
-## works for both windows and linux
+## supported windows and linux
 
 ## Clone the repository
 git clone https://github.com/tupini07/raylib-cmake.git
@@ -116,7 +104,7 @@ cd tools
 
 ## This gives much better performance in the web
 ## Example of how to use emscripten_set_main_loop_arg below
-}
+
 ```
 ##### emscripten_set_main_loop_arg example
 

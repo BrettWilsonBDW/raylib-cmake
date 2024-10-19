@@ -5,40 +5,24 @@ project(${PROJECT_NAME} CXX)
 set(CMAKE_CXX_STANDARD 20)
 
 ##########################################################################################
-# Project libs
+# Configurable options
 ##########################################################################################
 
 # toggle libs to be used with ON and OFF
 
-# raylib - wasm supported
-set(useRaylib ON)
-set(useMinimalRaylibModules OFF) # used mostly with apps with no need for game modules
-
-# imgui files - wasm supported
-set(useImGui OFF)
-set(noAssets OFF) # disable asset macros used with mostly with gui programs without assets
-
-# ldtk loader used with LDtk
-set(useLDtkLoader OFF)
-
-# fmt library - wasm supported
-set(useFmt OFF)
-
-# box2d physics 2d - wasm untested
-set(useBox2d OFF)
-
-# bullet physics 3d - wasm supported
-set(useBullet3 OFF)
-
-# note: wont play nice with gcc use msvc/clang instead
-# reactphysics 3d - wasm unsupported
-set(useReactPhysics3D OFF)
-
-# Jolt Physics 3d - wasm supported
-set(useJoltPhysics OFF)
+option(USE_RAYLIB "Use raylib" ON)
+option(USE_MINIMAL_RAYLIB_MODULES "Use minimal raylib modules" OFF)
+option(USE_IMGUI "Use ImGui" OFF)
+option(USE_NO_ASSETS "Use no assets" OFF)
+option(USE_LDTKLOADER "Use LDtk Loader" OFF)
+option(USE_FMT "Use fmt" OFF)
+option(USE_BOX2D "Use Box2D" OFF)
+option(USE_BULLET3 "Use Bullet Physics 3D" OFF)
+option(USE_REACTPHYSICS3D "Use React Physics 3D" OFF)
+option(USE_JOLTPHYSICS "Use Jolt Physics 3D" OFF)
 
 ##########################################################################################
-# pre lib include settings
+# MSVC runtime linking
 ##########################################################################################
 
 # this is here to ensure the runtime is linked staticly for msvc
@@ -49,6 +33,10 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded")
     endif()
 endif()
+
+##########################################################################################
+# Platform Configuration
+##########################################################################################
 
 if (NOT DEFINED PLATFORM)
     set(PLATFORM "default")
@@ -81,9 +69,11 @@ function(add_git_dependency libName gitURL gitTag)
         endif()  
 endfunction()
 
-#add new dependencies here
-# raylib
-if(useRaylib)
+##########################################################################################
+# Raylib Setup
+##########################################################################################
+
+if(USE_RAYLIB)
     set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
     set(BUILD_GAMES    OFF CACHE BOOL "" FORCE) # don't build the supplied example games
     set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
@@ -108,8 +98,11 @@ if(useRaylib)
     list(APPEND LIBRARIES ${dep})
 endif()
 
-# imgui files
-if(useImGui)
+##########################################################################################
+# ImGui Setup
+##########################################################################################
+
+if(USE_IMGUI)
     add_git_dependency(
         RlImGui
         https://github.com/raylib-extras/rlImGui.git
@@ -122,8 +115,7 @@ if(useImGui)
     file(COPY ${files_to_copy} DESTINATION ${CMAKE_SOURCE_DIR}/src/imgui)
 endif()
 
-# part of imgui files
-if(useImGui)
+if(USE_IMGUI)
     add_git_dependency(
         imGui
         https://github.com/ocornut/imgui.git
@@ -140,8 +132,11 @@ if(useImGui)
     file(COPY ${files_to_copy} DESTINATION ${CMAKE_SOURCE_DIR}/src/imgui)
 endif()
 
-# ldtk loader
-if(useLDtkLoader)
+##########################################################################################
+# LDtk Loader Setup
+##########################################################################################
+
+if(USE_LDTKLOADER)
     set(dep LDtkLoader)
     add_git_dependency(
         ${dep}
@@ -155,8 +150,11 @@ if(useLDtkLoader)
     list(APPEND LIBRARIES ${dep})
 endif()
 
-# fmt
-if(useFmt)
+##########################################################################################
+# fmt Setup
+##########################################################################################
+
+if(USE_FMT)
     set(dep fmt)
     add_git_dependency(
         ${dep}
@@ -170,8 +168,11 @@ if(useFmt)
     list(APPEND LIBRARIES ${dep})
 endif()
 
-# box2d
-if(useBox2d)
+##########################################################################################
+# Box2D Setup
+##########################################################################################
+
+if(USE_BOX2D)
     set(BOX2D_BUILD_TESTBED OFF CACHE BOOL "" FORCE) # don't build the supplied examples
     set(BOX2D_BUILD_UNIT_TESTS OFF CACHE BOOL "" FORCE) # don't build the supplied examples
 
@@ -186,8 +187,11 @@ if(useBox2d)
     list(APPEND LIBRARIES ${dep})
 endif()
 
-# bullet physics 3d
-if(useBullet3)
+##########################################################################################
+# Bullet Physics 3D Setup
+##########################################################################################
+
+if(USE_BULLET3)
     set(BUILD_EXTRAS OFF CACHE BOOL "" FORCE) # don't build the supplied examples
     set(BUILD_CPU_DEMOS OFF CACHE BOOL "" FORCE) # don't build the supplied examples
     set(BUILD_UNIT_TESTS OFF CACHE BOOL "" FORCE) # don't build the supplied examples
@@ -214,8 +218,11 @@ if(useBullet3)
     list(APPEND LIBRARIES BulletSoftBody)
 endif()
 
-# react physics
-if(useReactPhysics3D)
+##########################################################################################
+# ReactPhysics3D Setup
+##########################################################################################
+
+if(USE_REACTPHYSICS3D)
     set(dep reactphysics3d)
     add_git_dependency(
         ${dep}
@@ -230,8 +237,11 @@ if(useReactPhysics3D)
     list(APPEND LIBRARIES ${dep})
 endif()
 
-# jolt physics
-if(useJoltPhysics)
+##########################################################################################
+# Jolt Physics Setup
+##########################################################################################
+
+if(USE_JOLTPHYSICS)
     set(DOUBLE_PRECISION OFF)
     set(GENERATE_DEBUG_SYMBOLS ON)
     set(CROSS_PLATFORM_DETERMINISTIC OFF)
@@ -309,13 +319,13 @@ target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
 
 # Includes imgui source
-if(useImGui)
+if(USE_IMGUI)
     make_directory(../src/imgui)
     target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/src/imgui)
 endif()
 
 ##########################################################################################
-# compiler settings
+# Compiler and linker flags
 ##########################################################################################
 
 if(NOT ${PLATFORM} STREQUAL "Web")
@@ -353,11 +363,11 @@ endif()
 
 
 ##########################################################################################
-# custom commands
+# Build flags and additional settings
 ##########################################################################################
 
 # copy assets over into the build dir for the executable to have them for debug/run reasons
-if(NOT noAssets)
+if(NOT USE_NO_ASSETS)
     add_custom_target(copyAssetsOver
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_CURRENT_SOURCE_DIR}/assets
@@ -381,7 +391,7 @@ if(ASYNCIFY)
 endif()
 
 # turn on minamal raylib config build to include minimal raylib modules
-if(useMinimalRaylibModules AND useRaylib)
+if(USE_MINIMAL_RAYLIB_MODULES AND USE_RAYLIB)
     # Function to toggle a define in a given config file
     function(toggle_define file_path define)
         file(READ "${file_path}" input_file_contents)
@@ -414,7 +424,7 @@ if(useMinimalRaylibModules AND useRaylib)
         COMMAND ${CMAKE_COMMAND} .
     )
 else()
-    if(useRaylib)
+    if(USE_RAYLIB)
         # Function to toggle a define in a given config file
         function(toggle_define file_path define)
             file(READ "${file_path}" input_file_contents)
@@ -445,11 +455,7 @@ else()
     endif()
 endif()
 
-##########################################################################################
-# Project build settings
-##########################################################################################
-
-if (useReactPhysics3D)
+if (USE_REACTPHYSICS3D)
     set(CMAKE_CXX_FLAGS "-m64")
 endif()
 
@@ -457,13 +463,13 @@ endif()
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -O0 -DDEBUG")
     message("-- console enabled")
-    if(NOT noAssets AND NOT ${PLATFORM} STREQUAL "Web")
+    if(NOT USE_NO_ASSETS AND NOT ${PLATFORM} STREQUAL "Web")
         # Set the asset path macro to the absolute path on the dev machine
         target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/")   
     endif()
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
-    if(NOT noAssets AND NOT ${PLATFORM} STREQUAL "Web")
+    if(NOT USE_NO_ASSETS AND NOT ${PLATFORM} STREQUAL "Web")
         # Set the asset path macro in release mode to a relative path that assumes the assets folder is in the same directory as the game executable
         target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="./assets/")
     endif()
@@ -480,17 +486,13 @@ endif()
 # Set common compiler flags
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
-# if (NOT DEFINED PLATFORM)
-#     set(PLATFORM "default")
-# endif()
-
 if (${PLATFORM} STREQUAL "Web")
     # Tell Emscripten to build an .html file.
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
     SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Os")
     set(CMAKE_EXECUTABLE_SUFFIX ".html") # This line is used to set your executable to build with the emscripten html template so that you can directly open it.
     set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html")
-    if(NOT noAssets)
+    if(NOT USE_NO_ASSETS)
         # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s USE_GLFW=3 -s ASSERTIONS=1 -s WASM=1 -Os -Wall -s TOTAL_MEMORY=67108864 -s FORCE_FILESYSTEM=1 --preload-file assets/ --shell-file ../src/minshell.html")
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s USE_GLFW=3 -s ASSERTIONS=1 -s WASM=1 -Os -Wall -s TOTAL_MEMORY=67108864 -s FORCE_FILESYSTEM=1 --preload-file assets/ --shell-file ../vendor/minshell.html")
         target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="/assets/") # Set the asset path macro in release mode to a relative path that assumes the assets folder is in the same directory as the game executable
